@@ -12,7 +12,7 @@ When completed, you may use the material here for different venues):
 - Potentially 2-day workshop
 
 The sections are:
-- [Why should a WebSphere administrator care about Openshift?](Intro.md)
+- [WebSphere Application and Openshift](Intro.md)
 - Migrating Applications 
 - Application and Configuration Management
 - Problem Determination and Monitoring
