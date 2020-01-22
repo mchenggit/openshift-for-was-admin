@@ -23,7 +23,7 @@ Note that our focus will be on Openshift, a container based cloud derived from K
 In this section we will:
 - Review WebSphere infrastructure and its constraints.
 - List requirements driving changes in IT infrastructure towards operations modernization.
-- Give overview of Opensfhit
+- Explain why openshift is the technology to adopt for operations modernization.
 - Present options to run WebSphere applications in Openshift 
 - Compare the differences between WebSphere environments and Openshift environments.
 
@@ -108,14 +108,14 @@ Examples of languages and runtimes include Java/Jakart EE, Spring, reactive, nod
 An infrastructure capable of managing a polyglot environment provides a consistent management experience, ease of use, and cost savings compared to having to administer multiple environments.
 
 <a name="Cloud"></a>
-## Introduction to Openshift
+## Openshift for Operations Modernization
 
 This section provides a brief introduction to Openshift, and how it meets the requirements from the previous section.
-Openshift is a container based cloud based on Kubernetes. In a container based cloud, the unit of deployment is an image, not an application. For WebSphere Application Server, it looks like:
+Openshift is a container based cloud based on Kubernetes. In a container based cloud, the unit of deployment is an image, not an application. An image built for WebSphere Application Server looks like:
 
 ![An image](Image.jpg)
 
-Instead of installing WebSphere Application server multiple times, once for each node, you may start with an pre-built WebSphere Application Server image. Or alternatively, you may start with an operating system image and install WebSphere Application Server to create a new image. 
+Instead of installing WebSphere Application server multiple times, once for each node, you start with a pre-built WebSphere Application Server image. Or alternatively, you may start with an operating system image and install WebSphere Application Server to create a new image. 
 This new image then serves as the basis from which to create additional images containing additional prerequisites, shared libraries, applications, and configurations.
 
 A container is used to run an image at run time. Containers provide isolated environments at the process level, within which to run images. Within this isolated environment, the amount of resources, and visibility to them, such as cpu, memory, and disk can all be strictly controlled. In addition, due to the the isolation being at the process level, containers can be created and destroyed much more quickly compared to virtual machines, as quickly as starting and stopping processes.
@@ -134,6 +134,7 @@ A container orchestrator serves many of the same functions as the WebSphere depl
 
 Based on Kubernetes open source, Openshift also benefits from the improvements made by the open source community.
 It also supports a much more scalable environment compared to both traditional WebSphere Application Server  and WebSphere Liberty.
+
 | item | Openshift Contraints|
 |-----------|-----|
 | size of Openshift environment | 100,000 pods |
@@ -197,6 +198,7 @@ Note that it is also possible and supported to run applications using Tomcat or 
 With WebSphere Liberty, or WebSphere Base, the JVMs are stand-alone, not part of a collective or a cell. 
 The scalability of the environment is that of the Kubernetes environment, not of the original cell or collective environment.  
 For Liberty, this means:
+
 | item | Liberty in Openshiftconstraint|
 |-----------|-----|
 | size of environment|  100,000 pods |
@@ -210,6 +212,7 @@ For Liberty, this means:
 | migration to new Liberty version | instant |
 
 For WebSphere Base:
+
 | item | WAs Cell in Openshift|
 |-----------|-----|
 | size of environment | 100,000 pods |
@@ -233,6 +236,7 @@ It should be clear that Liberty has many advantages over WebSphere Base when run
 
 <a name="Openshift_Comparison"></a>
 ## WebSphere Openshift Comparison
+
 
 |           |             |WAS Cell      | Liberty Collective |Openshift + ICPA |
 |-----------|-------------|--------------|--------------------|-----------------|
@@ -262,4 +266,16 @@ It should be clear that Liberty has many advantages over WebSphere Base when run
 | security |   
 |          | admin roles  | 6+             | 1-2              | namespace + user defined|
 |          | admin audit  | yes            | yes              | yes (?)|
-:
+|    |app security domain | yes            | no (seperate by JVM) | depends on underlying runime|
+| |certificate management | some           | no               | yes?|
+| | secret management     | password hash/encryption | password hash/encryption| underlying runtime + config map + external value |
+| | security scans        | no             | no               | yes? |
+| problem determination   |                |                  |      |
+| | health management     | yes            | yes              | yes  |
+| | centralized logging   | no             | no               | yes   |
+| | centralized metrics   | no             | no               | yes  |
+| qualities of service    |                 |                 |      |
+| | in-memory session cache| DRS, WXS      | WSX              | Redhat data grid|
+| | built-in messaging     | SIBus         | yes (not HA)     | Redhat AMQ|
+| | 2-phase transactions  | yes            | yes (not HA)     | yes (not HA)|
+| devops |                | roll you own   |roll your own     | jenkins, Kabanero |
